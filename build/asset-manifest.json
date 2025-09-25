@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/static/js/main.da4d28f8.js",
+    "main.js": "/static/js/main.d2757222.js",
     "static/media/photo-jersey-raw-logo.jpg": "/static/media/photo-jersey-raw-logo.d622904f680ae93e1b17.jpg",
     "index.html": "/index.html",
-    "main.da4d28f8.js.map": "/static/js/main.da4d28f8.js.map"
+    "main.d2757222.js.map": "/static/js/main.d2757222.js.map"
   },
   "entrypoints": [
-    "static/js/main.da4d28f8.js"
+    "static/js/main.d2757222.js"
   ]
 }
