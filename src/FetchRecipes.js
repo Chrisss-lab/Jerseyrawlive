@@ -6,7 +6,7 @@ function FetchRecipes() {
 
   useEffect(() => {
     // Replace this fetch with your backend API if needed
-    fetch("http://localhost:5000/api/recipes")
+    fetch(`${process.env.REACT_APP_API_URL || ""}/api/recipes`)
       .then((res) => res.json())
       .then((data) => {
         setRecipes(data);

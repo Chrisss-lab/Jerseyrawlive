@@ -13,7 +13,7 @@ app.use(express.json());
 const SPREADSHEET_ID = "1oSyu-xaWxzfiOB4X-gYu9DiGu3Lj4f-cqT2xBt3mPs0";
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "service-account.json", // must exist in project root
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY), // must exist in project root
   scopes: ["https://www.googleapis.com/auth/spreadsheets"] // read/write
 });
 

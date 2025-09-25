@@ -30,7 +30,7 @@ function Order() {
 
   // Fetch recipes from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/recipes")
+    fetch(`${process.env.REACT_APP_API_URL || ""}/api/recipes`)
       .then((res) => res.json())
       .then((data) => {
         setRecipes(data);
@@ -41,7 +41,7 @@ function Order() {
 
   // Fetch packaging options from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/packages")
+    fetch(`${process.env.REACT_APP_API_URL || ""}/api/packages`)
       .then((res) => res.json())
       .then((data) => {
         setPackagingOptions(data);
@@ -132,7 +132,7 @@ function Order() {
         ? `${selectedPackage.Type} - ${parseFloat(selectedPackage.Size)} lb per container`
         : form.packaging;
 
-      const res = await fetch("http://localhost:5000/api/order", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || ""}/api/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
