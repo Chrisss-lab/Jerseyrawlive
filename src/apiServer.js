@@ -1,4 +1,3 @@
-// src/apiServer.js
 import express from "express";
 import { google } from "googleapis";
 import cors from "cors";
@@ -14,7 +13,7 @@ app.use(express.json());
 const SPREADSHEET_ID = "1oSyu-xaWxzfiOB4X-gYu9DiGu3Lj4f-cqT2xBt3mPs0";
 
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY), // Make sure this is set in Render
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
   scopes: ["https://www.googleapis.com/auth/spreadsheets"]
 });
 
@@ -37,7 +36,7 @@ app.get("/api/recipes", async (req, res) => {
       description: row[0] || "",
       price: row[1] || "",
       Name: row[2] || "",
-      Ingredients: row.slice(3, 27).filter(Boolean) // Ingredient 1–24
+      Ingredients: row.slice(3, 27).filter(Boolean)
     }));
 
     res.json(recipes);
@@ -104,9 +103,11 @@ app.post("/api/order", async (req, res) => {
 // ------------------------
 // Serve React frontend
 // ------------------------
-const buildPath = path.join(process.cwd(), "build");
+// Make sure Render is serving from the correct build folder
+const buildPath = path.resolve("build");
 app.use(express.static(buildPath));
 
+// All unknown routes should serve index.html (for React Router)
 app.get("*", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
