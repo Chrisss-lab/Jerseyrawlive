@@ -11,18 +11,15 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.1"
+    "web-vitals": "^2.1.4",
+    "serve": "^14.2.0"
   },
   "scripts": {
     "client": "react-scripts start",
     "server": "node --experimental-specifier-resolution=node src/apiServer.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "start": "node --experimental-specifier-resolution=node src/apiServer.js",
-    "build": "react-scripts build",
-    "update-env": "node live-website/update_env.js"
+    "start": "serve -s build -l $PORT",
+    "build": "react-scripts build"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
@@ -42,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
