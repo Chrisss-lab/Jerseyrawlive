@@ -2,6 +2,7 @@
 import express from "express";
 import { google } from "googleapis";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 app.use(cors());
@@ -13,8 +14,8 @@ app.use(express.json());
 const SPREADSHEET_ID = "1oSyu-xaWxzfiOB4X-gYu9DiGu3Lj4f-cqT2xBt3mPs0";
 
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY), // must exist in project root
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"] // read/write
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"]
 });
 
 const sheets = google.sheets({ version: "v4", auth });
@@ -34,7 +35,7 @@ app.get("/api/recipes", async (req, res) => {
       description: row[0] || "",
       price: row[1] || "",
       Name: row[2] || "",
-      Ingredients: row.slice(3, 27).filter(Boolean) // Ingredient 1–24
+      Ingredients: row.slice(3, 27).filter(Boolean)
     }));
 
     res.json(recipes);
@@ -78,7 +79,7 @@ app.post("/api/order", async (req, res) => {
     const sheetsApi = sheets.spreadsheets.values;
 
     const newRow = [
-      new Date().toLocaleDateString(), // Date
+      new Date().toLocaleDateString(),
       phone || "",
       name || "",
       email || "",
@@ -105,19 +106,13 @@ app.post("/api/order", async (req, res) => {
 });
 
 // ------------------------
-// GET orders (optional)
+// Serve React frontend
 // ------------------------
-app.get("/api/orders", async (req, res) => {
-  try {
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: "Orders!A2:J"
-    });
-    res.json(response.data.values || []);
-  } catch (err) {
-    console.error("Error fetching Orders sheet:", err);
-    res.status(500).send("Error fetching Orders sheet");
-  }
+const buildPath = path.join(process.cwd(), "build");
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 // ------------------------
@@ -125,5 +120,5 @@ app.get("/api/orders", async (req, res) => {
 // ------------------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });

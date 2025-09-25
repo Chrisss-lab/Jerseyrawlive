@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "node src/apiServer.js",
+    "build": "react-scripts build",
+    "heroku-postbuild": "npm run build",
+    "dev": "concurrently \"npm run start\" \"react-scripts start\""
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -11,36 +17,17 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "serve": "^14.2.0"
-  },
-  "scripts": {
-    "client": "react-scripts start",
-    "server": "node --experimental-specifier-resolution=node src/apiServer.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "start": "serve -s build -l $PORT",
-    "build": "react-scripts build"
-  },
-  "proxy": "http://localhost:5000",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "proxy": "http://localhost:5000",
+  "eslintConfig": {
+    "extends": ["react-app", "react-app/jest"]
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   }
 }
