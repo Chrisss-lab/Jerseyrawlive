@@ -14,15 +14,17 @@ app.use(express.json());
 const SPREADSHEET_ID = "1oSyu-xaWxzfiOB4X-gYu9DiGu3Lj4f-cqT2xBt3mPs0";
 
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY), // Make sure this is set in Render
   scopes: ["https://www.googleapis.com/auth/spreadsheets"]
 });
 
 const sheets = google.sheets({ version: "v4", auth });
 
 // ------------------------
-// GET all recipes
+// API routes
 // ------------------------
+
+// GET all recipes
 app.get("/api/recipes", async (req, res) => {
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -35,7 +37,7 @@ app.get("/api/recipes", async (req, res) => {
       description: row[0] || "",
       price: row[1] || "",
       Name: row[2] || "",
-      Ingredients: row.slice(3, 27).filter(Boolean)
+      Ingredients: row.slice(3, 27).filter(Boolean) // Ingredient 1–24
     }));
 
     res.json(recipes);
@@ -45,9 +47,7 @@ app.get("/api/recipes", async (req, res) => {
   }
 });
 
-// ------------------------
 // GET packaging options
-// ------------------------
 app.get("/api/packages", async (req, res) => {
   try {
     const response = await sheets.spreadsheets.values.get({
@@ -69,14 +69,10 @@ app.get("/api/packages", async (req, res) => {
   }
 });
 
-// ------------------------
 // POST new order
-// ------------------------
 app.post("/api/order", async (req, res) => {
   try {
-    const { phone, name, email, address, recipe, pounds, packaging, coupon, subtotal, discount, tax, total } = req.body;
-
-    const sheetsApi = sheets.spreadsheets.values;
+    const { phone, name, email, address, recipe, pounds, packaging, coupon, total } = req.body;
 
     const newRow = [
       new Date().toLocaleDateString(),
@@ -91,7 +87,7 @@ app.post("/api/order", async (req, res) => {
       total || ""
     ];
 
-    await sheetsApi.append({
+    await sheets.spreadsheets.values.append({
       spreadsheetId: SPREADSHEET_ID,
       range: "Orders!A2:J",
       valueInputOption: "USER_ENTERED",
@@ -119,6 +115,4 @@ app.get("*", (req, res) => {
 // Start server
 // ------------------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
